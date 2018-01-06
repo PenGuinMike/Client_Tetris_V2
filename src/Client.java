@@ -14,11 +14,13 @@ public class Client extends Thread {
     private PrintStream outStream;
     private BufferedReader inputStream;
     private TetrisPane tp;
+    private Player1 player1;
     private int socketNum;
     private String Ip ="127.0.0.1";
     //    public Server(int num){
-    public Client(TetrisPane tp1, int num){
+    public Client(TetrisPane tp1,Player1 p1, int num){
         tp=tp1;
+        player1 = p1;
         socketNum=num;
         System.out.println(socketNum);
         try{

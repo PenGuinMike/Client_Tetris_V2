@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Player1 extends JPanel implements Runnable{
-    private Client_Rec clientO;
+    private Client clientO;
     public int map[][] = new int[10][20];
     /*  宣告方塊圖片  */
     private Image backimage1;
@@ -67,7 +67,7 @@ public class Player1 extends JPanel implements Runnable{
                     { 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }
             }
     };
-    public Player1(Client_Rec clientO2){
+    public Player1(Client clientO2){
         clientO=clientO2;
         /*  build socket  */
 //        try{
