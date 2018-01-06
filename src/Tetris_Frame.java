@@ -20,7 +20,7 @@ public class Tetris_Frame extends JFrame {
         init();
     }
     private void init (){
-        this.setTitle("Server");
+        this.setTitle("Client");
         this.setBounds(dim.width/2-FrameW/2,dim.height/2-FrameH/2,FrameW,FrameH);
 //        this.setBounds(0,0,FrameW,FrameH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -40,8 +40,8 @@ public class Tetris_Frame extends JFrame {
         cp.add(tp);addKeyListener(tp);
         cp.add(p1);
 
-        client1=new Client(tp,2526);
-        client2=new Client_Rec(p1,2525);
+        client1=new Client(tp,2525);
+        client2=new Client_Rec(p1,2526);
         Thread thread1 = new Thread(tp);
         Thread thread2=new Thread(p1);
         thread1.start();
