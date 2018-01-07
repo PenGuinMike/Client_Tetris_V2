@@ -41,7 +41,7 @@ public class Client extends Thread {
 //            socket = new Socket(Ip,socketNum);
             outStream = new PrintStream(socket.getOutputStream());// step 1
             inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));// step 1
-            sendToclient("test");// step 1
+//            sendToclient("test");// step 1
             String str="";
             while (!(str=inputStream.readLine()).equals("")){// step 1
 //                System.out.println(str);
