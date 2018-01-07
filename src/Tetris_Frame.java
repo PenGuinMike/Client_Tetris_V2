@@ -10,6 +10,8 @@ import java.io.OutputStream;
 
 public class Tetris_Frame extends JFrame {
     Container cp;
+    public TetrisPane tp;
+    public Player1 p1;
     int FrameW=1800,FrameH=900;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -31,16 +33,17 @@ public class Tetris_Frame extends JFrame {
 
 //        server1=new Server(2525);
 //        server2=new Server(2526);
-
-        TetrisPane tp = new TetrisPane(client1);/* TetrisPane是用來畫遊戲畫面的,包括方塊and動作   */
         Player1 p1=new Player1(client1);
+        client1=new Client(tp,p1,2525);
+        TetrisPane tp = new TetrisPane(client1);/* TetrisPane是用來畫遊戲畫面的,包括方塊and動作   */
+
         tp.setBounds(100,80,700,700);
         p1.setBounds(1000,80,700,700);
         tp.setPreferredSize(new Dimension(700,700));
         cp.add(tp);addKeyListener(tp);
         cp.add(p1);
 
-        client1=new Client(tp,p1,2525);
+
 //        client2=new Client_Rec(p1,2526);
         Thread thread1 = new Thread(tp);
         Thread thread2=new Thread(p1);

@@ -302,12 +302,12 @@ public class Player1 extends JPanel implements Runnable{
     }
 
 
-    public void rec(){
+    public void rec(String str){
 //    public void rec(String strServ){
-        byte buff[]=new byte[1024];
+//        byte buff[]=new byte[1024];
         try {
-            int n=in.read(buff);
-            String str = new String(buff,0,n);
+//            int n=in.read(buff);
+//            String str = new String(buff,0,n);
             delayflag=true;
             while(str != null){
                 switch (str){

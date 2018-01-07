@@ -23,6 +23,7 @@ public class Client extends Thread {
         player1 = p1;
         socketNum=num;
         System.out.println(socketNum);
+
         try{
             ipadrs = InetAddress.getLocalHost();
             socket = new Socket(Ip,socketNum);
@@ -38,7 +39,7 @@ public class Client extends Thread {
     public void run(){
         try {
 //            socket = new Socket(Ip,socketNum);
-            outStream = new PrintStream(socket.getOutputStream());// tep 1
+            outStream = new PrintStream(socket.getOutputStream());// step 1
             inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));// step 1
             sendToclient("test");// step 1
             String str="";
@@ -56,7 +57,7 @@ public class Client extends Thread {
             if(outStream != null){
                 outStream.println(command);
             }else{
-                System.out.println("87");
+                System.out.println("Error");
             }
         }catch (Exception e){
             javax.swing.JOptionPane.showMessageDialog(null,"Error0"+e.toString());
