@@ -44,7 +44,8 @@ public class Client extends Thread {
             sendToclient("test");// step 1
             String str="";
             while (!(str=inputStream.readLine()).equals("")){// step 1
-                System.out.println(str);
+//                System.out.println(str);
+                player1.rec(str);
                 //rec改成傳入變數,然後從這邊叫rec
                 //rec(str)/rec("@init-7");
             }
@@ -57,7 +58,7 @@ public class Client extends Thread {
             if(outStream != null){
                 outStream.println(command);
             }else{
-                System.out.println("Error");
+                System.out.println("Error"+"  command:"+command);
             }
         }catch (Exception e){
             javax.swing.JOptionPane.showMessageDialog(null,"Error0"+e.toString());

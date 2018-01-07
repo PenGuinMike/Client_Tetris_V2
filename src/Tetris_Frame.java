@@ -146,6 +146,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
 //        backimage1=Toolkit.getDefaultToolkit().getImage("Tetris_image/bg1.png");
 //        backimage2=Toolkit.getDefaultToolkit().getImage("Tetris_image/bg2.png");
         /*  初始化背景陣列  */
+
         initmap();
         newBlock();
         holdblock = -1;
@@ -162,6 +163,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
                 map[i][j] = 0;
             }
         }
+        clientO.sendToclient("@cmd-init");
 //        deli("@cmd-init");//-----------------------------------------
     }
 
@@ -238,6 +240,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
         turnState = 0;
         x = 4;
         y = 0;
+        clientO.sendToclient("next" + Integer.toString(nextblock));
 //        deli("next" + Integer.toString(nextblock));//-----------------------------------------
         System.out.println("@int-" + Integer.toString(nextblock));
         if (gameOver(x, y) == 1) {
@@ -259,6 +262,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
             blockPause++;
         } else if (blow(x, y + 1, blockType, turnState) == 0 && blockPause > 0) {
             setBlock(x, y, blockType, turnState);
+            clientO.sendToclient("set");
 //            deli("set");//-----------------------------------------
             for(int i=0;i<10;i++){
 
@@ -380,22 +384,26 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
             case KeyEvent.VK_DOWN:
                 down_Shift();
 //                deli("down_shift();");//-----------------------------------------
+                    clientO.sendToclient("down_shift();");
                 break;
             case KeyEvent.VK_LEFT:
                 l_Shift();
 //                deli("l_Shift();");//-----------------------------------------
-
+                clientO.sendToclient("l_shift();");
                 break;
             case KeyEvent.VK_RIGHT:
                 r_Shift();
 //                deli("r_Shift();");//-----------------------------------------
+                clientO.sendToclient("r_shift();");
                 break;
             case KeyEvent.VK_UP:
                 roTate();
 //                deli("roTate();");//-----------------------------------------
+                clientO.sendToclient("roTate();");
                 break;
             case KeyEvent.VK_SHIFT:
 //                deli("hold");//-----------------------------------------
+                clientO.sendToclient("hold");
 
                 if (holdblock >= 0 && changedblock == 1) {
                     int temp;
@@ -421,6 +429,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_SPACE:
 //                deli("fall_down();");//-----------------------------------------
+                clientO.sendToclient("fall_down();");
                 fall_down();
                 break;
         }
@@ -436,6 +445,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
         public void actionPerformed(ActionEvent e) {
             down_Shift();
 //            deli("down_shift();");//-----------------------------------------
+            clientO.sendToclient("down_shift();");
             repaint();
 
         }
@@ -443,12 +453,12 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
     /*
     送資料的方法
      */
-    public void deli(String st) {
-        try {
-            out.write(st.getBytes());
-        } catch (Exception e) {
-            System.out.println("this is delivering problem");
-        }
-    }
+//    public void deli(String st) {
+//        try {
+//            out.write(st.getBytes());
+//        } catch (Exception e) {
+//            System.out.println("this is delivering problem");
+//        }
+//    }
 
 }

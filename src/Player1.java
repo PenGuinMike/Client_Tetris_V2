@@ -392,6 +392,10 @@ public class Player1 extends JPanel implements Runnable{
                         }
                         str=null;
                         break;
+                    case "test":
+                        System.out.println("test for delivered");
+                        str=null;
+                        break;
 //QQ
                 }
 
