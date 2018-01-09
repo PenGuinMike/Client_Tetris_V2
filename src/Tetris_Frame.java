@@ -389,12 +389,12 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
             case KeyEvent.VK_LEFT:
                 l_Shift();
 //                deli("l_Shift();");//-----------------------------------------
-                clientO.sendToclient("l_shift();");
+                clientO.sendToclient("l_Shift();");
                 break;
             case KeyEvent.VK_RIGHT:
                 r_Shift();
 //                deli("r_Shift();");//-----------------------------------------
-                clientO.sendToclient("r_shift();");
+                clientO.sendToclient("r_Shift();");
                 break;
             case KeyEvent.VK_UP:
                 roTate();
