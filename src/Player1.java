@@ -31,6 +31,8 @@ public class Player1 extends JPanel implements Runnable{
     private JLabel jlbHold = new JLabel("HOLD");
     private JLabel jlbNext = new JLabel("NEXT");
     private JLabel jlbLine = new JLabel("Line");
+    private int score=0;
+    private JLabel Linet = new JLabel(Integer.toString(score));
     private JLabel jlbCount = new JLabel("");
     private Image [] color = new Image[8];
     private final int shapes[][][]=new int[][][]{
@@ -95,6 +97,10 @@ public class Player1 extends JPanel implements Runnable{
         jlbCount.setBounds(110,420,200,200);
         jlbCount.setFont(font1);
         jlbCount.setForeground(Color.WHITE);
+        Linet.setBounds(90,480,200,200);
+        Linet.setFont(font1);
+        Linet.setForeground(Color.WHITE);
+        this.add(Linet);
         this.add(jlbHold);
         this.add(jlbNext);
         this.add(jlbLine);
@@ -199,7 +205,8 @@ public class Player1 extends JPanel implements Runnable{
                 }
             }
             if (count == 10) {
-                access1 = 1;
+                score++;
+                Linet.setText(Integer.toString(score));
                 for (int j = 0; j < 10; j++) {
                     map[j][i] = 0;
                 }
@@ -413,10 +420,18 @@ public class Player1 extends JPanel implements Runnable{
                         }
                         str=null;
                         break;
-                    case "test":
-                        System.out.println("test for delivered");
+                    case "endding":
+                        javax.swing.JOptionPane.showMessageDialog(null,"your opponent has left,game is over");
+                        System.exit(0);
                         str=null;
                         break;
+                    case"swin":
+                        javax.swing.JOptionPane.showMessageDialog(null,"you lose, bye bye!! ");
+                        System.exit(0);
+                        str=null;
+                        break;
+
+
 //QQ
                 }
 

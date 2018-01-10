@@ -16,13 +16,20 @@ public class Client_GetIP extends JFrame {
     private void init(){
         this.setTitle("Enter Server's IP");
         this.setLayout(null);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setBounds(dim.width/2-FrameW/2,dim.height/2-FrameH/2,FrameW,FrameH);
         jbtnStart = new JButton("Start");
-        jtf = new JTextField();
+        jtf = new JTextField(null);
         jtf.setBounds(65,80,260,35);
         jbtnStart.setBounds(150,150,85,45);
         this.add(jtf);
         this.add(jbtnStart);
+
+        jbtnStart.setEnabled(false);
+        if (jtf.getText() !=null){
+            jbtnStart.setEnabled(true);
+        }
+
 
         jbtnStart.addActionListener(new ActionListener() {
             @Override

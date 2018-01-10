@@ -30,11 +30,13 @@ public class Client extends Thread {
         try{
             ipadrs = InetAddress.getLocalHost();
             socket = new Socket(Ip,socketNum);
-//            servSocket = new ServerSocket(socketNum);
         }catch (UnknownHostException e){
             javax.swing.JOptionPane.showMessageDialog(null,"Error6"+e.toString());
         }catch (IOException ioe){
-            javax.swing.JOptionPane.showMessageDialog(null,"Error7"+ioe.toString());
+            javax.swing.JOptionPane.showMessageDialog(null,"please enter the ip");
+            socket.isClosed();
+            String[] args = new String[0];
+            Main.main(args);
         }catch (Exception yee){
             javax.swing.JOptionPane.showMessageDialog(null,"Error8"+yee.toString());
         }
@@ -49,11 +51,10 @@ public class Client extends Thread {
             while (true){
                 str=inputStream.readLine();
                 player1.rec(str);
-                //rec改成傳入變數,然後從這邊叫rec
-                //rec(str)/rec("@init-7");
             }
         }catch (Exception e){
-            javax.swing.JOptionPane.showMessageDialog(null,"Error9"+e.toString());
+            javax.swing.JOptionPane.showMessageDialog(null,"the opponent has left,game is over");
+            System.exit(0);
         }
     }
     public void  sendToclient(String command){
@@ -65,7 +66,8 @@ public class Client extends Thread {
                 System.out.println("Error"+"  command:"+command);
             }
         }catch (Exception e){
-            javax.swing.JOptionPane.showMessageDialog(null,"Error0"+e.toString());
+            javax.swing.JOptionPane.showMessageDialog(null,"Error8"+e.toString());
+
         }
     }
 

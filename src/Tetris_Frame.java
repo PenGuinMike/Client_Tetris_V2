@@ -13,56 +13,74 @@ public class Tetris_Frame extends JFrame {
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Client_GetIP cgIp;
     private String Ip;
+    private JLabel sign = new JLabel("clear 50 lines to win");
+
 
     public Client client1;
-//    public Client_Rec client2;
+
 
     public Tetris_Frame ( Client_GetIP cg, String get){
         cgIp=cg;
         Ip=get;
         init();
     }
-    private void init (){
+    private void init () {
         this.setTitle("Client");
-        this.setBounds(dim.width/2-FrameW/2,dim.height/2-FrameH/2,FrameW,FrameH);
-//        this.setBounds(0,0,FrameW,FrameH);
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setBounds(dim.width / 2 - FrameW / 2, dim.height / 2 - FrameH / 2, FrameW, FrameH);
+
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
-        cp=this.getContentPane();
+        cp = this.getContentPane();
         cp.setLayout(null);
         cp.setBackground(new Color(25, 85, 15));
 
 //        server1=new Server(2525);
 //        server2=new Server(2526);
-        Player1 p1=new Player1(client1);
-        client1=new Client(tp,p1,2525,Ip);
+        Player1 p1 = new Player1(client1);
+        client1 = new Client(tp, p1, 2525, Ip);
         TetrisPane tp = new TetrisPane(client1);/* TetrisPane是用來畫遊戲畫面的,包括方塊and動作   */
 
-        tp.setBounds(100,80,700,700);
-        p1.setBounds(1000,80,700,700);
-        tp.setPreferredSize(new Dimension(700,700));
-        cp.add(tp);addKeyListener(tp);
+        tp.setBounds(100, 80, 700, 700);
+        p1.setBounds(1000, 80, 700, 700);
+        tp.setPreferredSize(new Dimension(700, 700));
+        sign.setBounds(500,20,500,50);
+        sign.setFont(new Font(null,Font.BOLD,30));
+        sign.setForeground(Color.WHITE);
+        cp.add(tp);
+        addKeyListener(tp);
         cp.add(p1);
+        cp.add(sign);
 
 
-//        client2=new Client_Rec(p1,2526);
+
         Thread thread1 = new Thread(tp);
-        Thread thread2=new Thread(p1);
+        Thread thread2 = new Thread(p1);
         thread1.start();
         thread2.start();
         client1.start();
-        this.addWindowListener(new WindowAdapter() {
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) { }
             @Override
             public void windowClosing(WindowEvent e) {
-//                client1.closeSocket();
                 endFrame ef = new endFrame();
                 ef.setVisible(true);
-                Tetris_Frame.this.dispose();
-//                Tetris_Frame.this.setDefaultCloseOperation(Tetris_Frame.this.EXIT_ON_CLOSE);
+                client1.sendToclient("endding");
             }
+            @Override
+            public void windowClosed(WindowEvent e) {
+                endFrame ef = new endFrame();
+                ef.setVisible(true);
+            }
+            @Override
+            public void windowIconified(WindowEvent e) { }
+            @Override
+            public void windowDeiconified(WindowEvent e) { }
+            @Override
+            public void windowActivated(WindowEvent e) { }
+            @Override
+            public void windowDeactivated(WindowEvent e) { }
         });
-//        client2.start();
-//        this.
     }
 }
 
@@ -85,11 +103,14 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
     private int holdblock, nextblock, changedblock;
     /*  flag判斷方塊是否已放置*/
     private boolean flag = false;
+
     private int currentblock;
     /*  新增方塊圖片檔*/
     private JLabel jlbHold = new JLabel("HOLD");
     private JLabel jlbNext = new JLabel("NEXT");
     private JLabel jlbLine = new JLabel("Line");
+    private int score=0;
+    private JLabel Linet = new JLabel(Integer.toString(score));
     private JLabel jlbCount = new JLabel("");
     private Image[] color = new Image[8];
     private int bomb;
@@ -151,12 +172,17 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
         jlbLine.setBounds(90,380,200,200);
         jlbLine.setFont(font1);
         jlbLine.setForeground(Color.WHITE);
+        Linet.setBounds(90,480,200,200);
+        Linet.setFont(font1);
+        Linet.setForeground(Color.WHITE);
+        this.add(Linet);
         jlbCount.setBounds(110,420,200,200);
         jlbCount.setFont(font1);
         jlbCount.setForeground(Color.WHITE);
         this.add(jlbHold);
         this.add(jlbNext);
         this.add(jlbLine);
+
         this.add(jlbCount);
 //        this.setBackground(Color.BLACK);
         this.setBackground(new Color(63, 61, 64));
@@ -387,7 +413,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
     }
 
     void deLine() {
-        int row = 19, access1 = 0;
+        int row = 19;
         for (int i = 19; i >= 0; i--) {
             int count = 0;
             for (int j = 0; j < 10; j++) {
@@ -396,8 +422,14 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
                 }
             }
             if (count == 10) {
-                bomb++;
-                access1 = 1;
+
+                score++;
+                if (score>50){
+                    javax.swing.JOptionPane.showMessageDialog(this,"you win!!!!!");
+                    clientO.sendToclient("cwin");
+                    System.exit(0);
+                }
+                Linet.setText(Integer.toString(score));
                 for (int j = 0; j < 10; j++) {
                     map[j][i] = 0;
                 }
@@ -512,16 +544,6 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
             repaint();
 
         }
-    }
-    /*
-    送資料的方法
-     */
-//    public void deli(String st) {
-//        try {
-//            out.write(st.getBytes());
-//        } catch (Exception e) {
-//            System.out.println("this is delivering problem");
-//        }
-//    }
+    }}
 
-}
+
