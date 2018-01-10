@@ -16,12 +16,15 @@ public class Client extends Thread {
     private TetrisPane tp;
     private Player1 player1;
     private int socketNum;
-    private String Ip ="10.51.3.214";
+//    private String Ip ="10.51.3.214";
+//    private String Ip ="127.0.0.1";
+    private String Ip;
     //    public Server(int num){
-    public Client(TetrisPane tp1,Player1 p1, int num){
+    public Client(TetrisPane tp1,Player1 p1, int num,String ip){
         tp=tp1;
         player1 = p1;
         socketNum=num;
+        Ip=ip;
         System.out.println(socketNum);
 
         try{
@@ -63,6 +66,15 @@ public class Client extends Thread {
             }
         }catch (Exception e){
             javax.swing.JOptionPane.showMessageDialog(null,"Error0"+e.toString());
+        }
+    }
+
+    public void closeSocket(){
+        try {
+            inputStream.close();
+            socket.close();
+        }catch (Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Error00"+e.toString());
         }
     }
 

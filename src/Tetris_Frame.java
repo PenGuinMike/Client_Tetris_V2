@@ -1,10 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -14,18 +11,22 @@ public class Tetris_Frame extends JFrame {
     public Player1 p1;
     int FrameW=1800,FrameH=900;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    private Client_GetIP cgIp;
+    private String Ip;
 
     public Client client1;
 //    public Client_Rec client2;
 
-    public Tetris_Frame (){
+    public Tetris_Frame ( Client_GetIP cg, String get){
+        cgIp=cg;
+        Ip=get;
         init();
     }
     private void init (){
         this.setTitle("Client");
         this.setBounds(dim.width/2-FrameW/2,dim.height/2-FrameH/2,FrameW,FrameH);
 //        this.setBounds(0,0,FrameW,FrameH);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setResizable(false);
         cp=this.getContentPane();
         cp.setLayout(null);
@@ -34,7 +35,7 @@ public class Tetris_Frame extends JFrame {
 //        server1=new Server(2525);
 //        server2=new Server(2526);
         Player1 p1=new Player1(client1);
-        client1=new Client(tp,p1,2525);
+        client1=new Client(tp,p1,2525,Ip);
         TetrisPane tp = new TetrisPane(client1);/* TetrisPane是用來畫遊戲畫面的,包括方塊and動作   */
 
         tp.setBounds(100,80,700,700);
@@ -50,7 +51,18 @@ public class Tetris_Frame extends JFrame {
         thread1.start();
         thread2.start();
         client1.start();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+//                client1.closeSocket();
+                endFrame ef = new endFrame();
+                ef.setVisible(true);
+                Tetris_Frame.this.dispose();
+//                Tetris_Frame.this.setDefaultCloseOperation(Tetris_Frame.this.EXIT_ON_CLOSE);
+            }
+        });
 //        client2.start();
+//        this.
     }
 }
 
@@ -75,7 +87,12 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
     private boolean flag = false;
     private int currentblock;
     /*  新增方塊圖片檔*/
+    private JLabel jlbHold = new JLabel("HOLD");
+    private JLabel jlbNext = new JLabel("NEXT");
+    private JLabel jlbLine = new JLabel("Line");
+    private JLabel jlbCount = new JLabel("");
     private Image[] color = new Image[8];
+    private int bomb;
     private final int shapes[][][] = new int[][][]{
             // I
             {{0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -124,6 +141,23 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
 //
 //        }
         this.setLayout(null);
+        Font font1 = new Font(null,Font.BOLD,30);
+        jlbHold.setBounds(10,-50,200,200);
+        jlbHold.setFont(font1);
+        jlbHold.setForeground(Color.WHITE);
+        jlbNext.setBounds(550,-50,200,200);
+        jlbNext.setFont(font1);
+        jlbNext.setForeground(Color.WHITE);
+        jlbLine.setBounds(90,380,200,200);
+        jlbLine.setFont(font1);
+        jlbLine.setForeground(Color.WHITE);
+        jlbCount.setBounds(110,420,200,200);
+        jlbCount.setFont(font1);
+        jlbCount.setForeground(Color.WHITE);
+        this.add(jlbHold);
+        this.add(jlbNext);
+        this.add(jlbLine);
+        this.add(jlbCount);
 //        this.setBackground(Color.BLACK);
         this.setBackground(new Color(63, 61, 64));
         try {
@@ -150,6 +184,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
         initmap();
         newBlock();
         holdblock = -1;
+        bomb=0;
 //        nextblock = (int) (Math.random() * 7);
 
         /*  宣告Timer  */
@@ -361,6 +396,7 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
                 }
             }
             if (count == 10) {
+                bomb++;
                 access1 = 1;
                 for (int j = 0; j < 10; j++) {
                     map[j][i] = 0;
@@ -371,7 +407,34 @@ class TetrisPane extends JPanel implements KeyListener ,Runnable {
                 }
                 row--;
             }
+
         }
+        sendBomb(bomb);
+        bomb=0;
+    }
+
+    public void sendBomb(int bombNum){
+        switch (bombNum){
+            case 1:
+                bombNum=1;
+                clientO.sendToclient("@cmd-bomb");
+                break;
+
+            case 2:
+                bombNum=2;
+                break;
+            case 3:
+                bombNum=2;
+                break;
+            case 4:
+                bombNum=2;
+                break;
+        }
+
+    }
+
+    public void testfun (String strBomb){
+        System.out.println("It`s Bombs");
     }
 
     @Override
